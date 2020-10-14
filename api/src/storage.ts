@@ -11,6 +11,7 @@ import { getConfigFromEnv } from './utils/get-config-from-env';
 /** @todo dynamically load these storage adapters */
 import { AmazonWebServicesS3Storage } from '@slynova/flydrive-s3';
 import { GoogleCloudStorage } from '@slynova/flydrive-gcs';
+import { AzureBlobWebServicesStorage } from '@slynova/flydrive-azureBlob';
 
 validateEnv(['STORAGE_LOCATIONS']);
 
@@ -37,7 +38,8 @@ function getStorageConfig(): StorageManagerConfig {
 
 		delete diskConfig.config.publicUrl;
 		delete diskConfig.config.driver;
-
+		// tslint:disable-next-line:no-console
+		console.log('DISKCONFIG', location, diskConfig);
 		config.disks![location] = diskConfig;
 	});
 
@@ -69,5 +71,7 @@ function getStorageDriver(driver: string) {
 			return AmazonWebServicesS3Storage;
 		case 'gcs':
 			return GoogleCloudStorage;
+		case 'azureBlob':
+			return AzureBlobWebServicesStorage;
 	}
 }

@@ -30,17 +30,17 @@ export class AssetsService {
 			const { exists } = await storage.disk(file.storage).exists(assetFilename);
 
 			if (exists) {
-				return { stream: storage.disk(file.storage).getStream(assetFilename), file };
+				return { stream: await storage.disk(file.storage).getStream(assetFilename), file };
 			}
 
-			const readStream = storage.disk(file.storage).getStream(file.filename_disk);
+			const readStream = await storage.disk(file.storage).getStream(file.filename_disk);
 			const transformer = sharp().resize(resizeOptions);
 
 			await storage.disk(file.storage).put(assetFilename, readStream.pipe(transformer));
 
-			return { stream: storage.disk(file.storage).getStream(assetFilename), file };
+			return { stream: await storage.disk(file.storage).getStream(assetFilename), file };
 		} else {
-			const readStream = storage.disk(file.storage).getStream(file.filename_disk);
+			const readStream = await storage.disk(file.storage).getStream(file.filename_disk);
 			return { stream: readStream, file };
 		}
 	}
